@@ -50,3 +50,31 @@ def call_option_pricer_monte_carlo(spot, strike, maturity, r, vol, num0fPath = 5
     price = exp(-r * maturity) * sumValue / num0fPath
     return price
 print '期权价格（蒙特卡洛） : %.4f' % call_option_pricer_monte_carlo(spot, strike, maturity, r, vol)
+
+
+# 蒙特卡洛模拟结果
+
+pathScenario = range(1000,50000,1000)
+numberOfTrials = 100
+
+confidenceIntervalUpper = []
+confidenceIntervalLower = []
+means= []
+
+for scenario in pathScenario:
+    res = np.zeros(numberOfTrials)
+    for i in range(numberOfTrials):
+        res[i] = call_option_pricer_monte_carlo(spot, strike, maturity, r, vol, numOfPath = scenario)
+    means.append(res.mean())
+    confidenceIntervalUpper.append(res.mean() + 1.96*res.std())
+    confidenceIntervalLower.append(res.mean() - 1.96*res.std())
+    
+# 作图
+pylab.figure(figsize = (12,8))
+tabel = np.array([means, confidenceIntervalUpper, confidenceIntervalLower]).T
+pylab.plot(pathScenario, tabel)
+pylab.title(u'期权计算蒙特卡洛模拟', fontproperties = font, fontsize = 18)
+pylab.legend([u'均值', u'95%置信区间上界', u'95%置信区间下界'], prop = font)
+pylab.ylabel(u'价格', fontproperties = font, fontsize = 15)
+pylab.xlabel(u'模拟次数', fontproperties = font, fontsize = 15)
+pylab.grid(True)
