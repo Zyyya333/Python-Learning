@@ -19,3 +19,17 @@ def call_option_pricer(spot, strike, maturity, r, vol):
     return price
 
 print '期权价格：%.4f' %call_option_pricer(spot, strike, maturity, r, vol)
+
+# 画图
+from matplotlib import pylab
+import seaborn as sns
+font.set_size(15)
+sns.set(style = 'ticks')
+pylab.figure(figsize =(12,8))
+pylab.bar(portfolioSize, timeSpent, color = 'b', width = 300)
+pylab.grid(True)
+pylab.title(u'期权计算时间耗时（单位：秒）', fontproperties = font, fontsize = 18)
+pylab.ylabel(u'时间（s)', fontproperties = font, fontsize = 15)
+pylab.xlabel(u'组合数量', fontproperties = font, fontsize = 15)
+
+
