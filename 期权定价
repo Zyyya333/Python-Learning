@@ -32,4 +32,21 @@ pylab.title(u'期权计算时间耗时（单位：秒）', fontproperties = font
 pylab.ylabel(u'时间（s)', fontproperties = font, fontsize = 15)
 pylab.xlabel(u'组合数量', fontproperties = font, fontsize = 15)
 
+# 探讨使用蒙特卡洛方法
+import scipy
+scipy.random.randn(10)
 
+pylab.figure(figsize = (12,8))
+randomSeries = scipy.random.randn(1000)
+pylab.plot(randomSeries)
+print u'均  值：%.4f' % randomSeries.mean()
+print u'标准差：%.4f' % randomSeries.std()
+
+# 期权计算的蒙特卡洛方法
+def call_option_pricer_monte_carlo(spot, strike, maturity, r, vol, num0fPath = 5000):
+    randomSeries = scipy.random.randn(num0fPath)
+    s_t = spot * np.exp((r - 0.5 * vol * vol) * maturity + randomSeries * vol * sqrt(maturity))
+    sumValue = np.maximum(s_t - strike, 0.0).sum()
+    price = exp(-r * maturity) * sumValue / num0fPath
+    return price
+print '期权价格（蒙特卡洛） : %.4f' % call_option_pricer_monte_carlo(spot, strike, maturity, r, vol)
